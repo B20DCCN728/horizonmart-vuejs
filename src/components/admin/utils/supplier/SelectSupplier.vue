@@ -64,6 +64,7 @@
             });
     }, 300);
 
+    // Update
     watch(state.value, () => {
         state.data = [];
         state.fetching = false;

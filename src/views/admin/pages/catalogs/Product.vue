@@ -214,6 +214,7 @@ const resetForm = () => {
   form.supplierId = '';
   form.categoryId = '12';
   form.description = '';
+  form.quantity = '';
   form.imagePath = '';
   fileList.value = [];
 };
@@ -275,6 +276,7 @@ const detail = async (id) => {
   form.categoryId = request.data.categoryId;
   form.description = request.data.description;
   form.imagePath = request.data.imagePath;
+  form.quantity = request.data.quantity;
   fileList.value = [];
   open.value = true;
   form = request.data;
@@ -298,18 +300,19 @@ onMounted(() => {
 });
 
 const handleChange = info => {
-  if (info.file.status === 'uploading') {
-    loading.value = true;
-    return;
-  }
-  if (info.file.status === 'done') {
-    // Get this url from response in real world.
-    form.imagePath = "http://localhost:8762/ps/product/image/" + fileList.value[0].name;
-    message.success('upload success');
-  }
-  if (info.file.status === 'error') {
-    loading.value = false;
-    message.error('upload error');
+  switch (info.file.status) {
+    case 'uploading':
+      loading.value = true;
+      return;
+    case 'done':
+      // Get this url from response in real world.
+      form.imagePath = "http://localhost:8762/ps/product/image/" + fileList.value[0].name;
+      message.success('upload success');
+      break;
+    case 'error':
+      loading.value = false;
+      message.error('upload error');
+      break;
   }
 };
 
@@ -386,8 +389,14 @@ const handleChange = info => {
                 </a-form-item>
               </a-col>
               <a-col :span="12">
-                <a-form-item label="Nhà cung cấp" name="supplier">
-                  <a-input v-model:value="form.supplierId" placeholder="Vui lòng nhập nhà cung cấp!" />
+                <a-form-item label="Nhập số lượng" name="quantity">
+                  <a-input-number 
+                    v-model:value="form.quantity" 
+                    style="width: 100%"
+                    addon-before="-"
+                    addon-after="+" 
+                    placeholder="Vui lòng nhập số lượng!"
+                  />
                 </a-form-item>
               </a-col>
             </a-row>

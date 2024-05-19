@@ -25,11 +25,16 @@ const routes = [
             }
         ]
     },
-    // {
-    //     path: "/:pathMatch(.*)*",
-    //     name: "Not Found", 
-    //     component: () => import("../views/NotFound.vue"),
-    // }
+    {
+        path: "/home",
+        name: " home",
+        component: () => import("../views/customer/Home.vue"),
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        name: "Not Found", 
+        component: () => import("../views/NotFound.vue"),
+    }
 ];
 
 const router = createRouter({   
