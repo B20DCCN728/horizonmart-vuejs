@@ -4,11 +4,11 @@
 <!--Create 1 - Row  -->
 <div class="grid__row">
     <div class="grid__column-2-4">
-        <a class="home-product-item" href="#">  
+        <a v-for="(product, index) in products" class="home-product-item" href="#" :key="index">
             <!-- Product img -->
             <div class="home-product-item__img" style="background-image: url(https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg)"></div>
             <!-- Title -->
-            <h4 class="home-product-item__name">PMC WAGNER Multi Cam</h4>
+            <h4 class="home-product-item__name">{{ product.name}}</h4>
             <div class="home-product-item__price">
                 <span class="home-product-item__price-old">1.200.000đ</span>                        
                 <span class="home-product-item__price-current">0.000.000đ</span>
@@ -36,18 +36,57 @@
             <!-- Favourite -->
             <div class="home-product-item__favourite">
                 <i class="fa-solid fa-check"></i>
-                <span>Yêu thích</span>
-            </div>
-            <!-- Sell off -->
-            <div class="home-product-item__sell-off">
-                <span class="home-product-item__sell-off-percent">43%</span>
-                <span class="home-product-item__sell-off-label">Giảm</span> 
+                <span>Giảm 10% giá</span>
             </div>
         </a>                   
     </div>
 </div>
 </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+let products = ref([
+    {
+        "id": 18,
+        "name": "AXHJASDFA",
+        "purchasePrice": 16000,
+        "sellingPrice": 19000,
+        "createdDate": "2024-04-15T15:30:00",
+        "imagePath": "http://localhost:8762/ps/product/image/Screenshot 2024-03-18 221542.png",
+        "description": "Hello dear",
+        "category": {
+            "id": 1,
+            "name": "Rau cu",
+            "description": "Khu vực rau trong siêu thị đa dạng với một loạt các loại rau xanh từ cải bắp, cải xoong, bí đỏ cho đến rau cải nội địa và rau sạch từ các trang trại địa phương. Mỗi loại rau được sắp xếp gọn gàng, phản ánh sự tươi mới và sức khỏe."
+        },
+        "supplier": {
+            "id": 1,
+            "name": "Viet gap",
+            "address": "Ha noi",
+            "phoneNumber": "0337176055",
+            "taxID": "1200123",
+            "description": "Luon cung cap rau ngon bo re cho mn"
+        }
+    },
+]);
+
+const fecthProducts = async () => {
+    try {
+        const response = await axios.get('http://localhost:8762/ps/product/get');
+        products.value = response.data;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+onMounted(() => {
+    fecthProducts();
+});
+
+</script>
 
 <style scoped>
 /* Home product */

@@ -10,22 +10,34 @@
     </h3>
     <!-- List item -->
     <ul class="category-list">
-        <li class="category-item category-link--active">
-        <a href="#" class="category-link">Adidas</a>
-        </li>
-        <li class="category-item">
-        <a href="#" class="category-link">Nike</a>
-        </li>
-        <li class="category-item">
-        <a href="#" class="category-link">Converse</a>
-        </li>
-        <li class="category-item">
-        <a href="#" class="category-link">Vans</a>
+        <li v-for="(x, index) in categories" class="category-item category-link--active">
+          <a href="" class="category-link">{{ x.name }}</a>
         </li>
     </ul>
     </nav>
 </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+
+
+let categories = ref([]);
+const fetchCategories = async () => {
+  try {
+    const response = await axios.get('http://localhost:8762/ps/product/category/get-all');
+    categories.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+onMounted(() => {
+  fetchCategories();
+});
+</script>
 
 <style scoped>
 @import '../../../assets/styles/base.css';
