@@ -3,15 +3,15 @@
 <div class="home-product">
 <!--Create 1 - Row  -->
 <div class="grid__row">
-    <div class="grid__column-2-4">
-        <a v-for="(product, index) in products" class="home-product-item" href="#" :key="index">
+    <div class="grid__column-2-4" v-for="(product, index) in products" :key="index">
+        <a class="home-product-item" href="#">
             <!-- Product img -->
             <div class="home-product-item__img" style="background-image: url(https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg)"></div>
             <!-- Title -->
             <h4 class="home-product-item__name">{{ product.name}}</h4>
             <div class="home-product-item__price">
                 <span class="home-product-item__price-old">1.200.000đ</span>                        
-                <span class="home-product-item__price-current">0.000.000đ</span>
+                <span class="home-product-item__price-current">{{ product.sellingPrice }}</span>
             </div>
             <!-- Like and vote rating and sold -->
             <div class="home-product-item__action">
@@ -26,17 +26,17 @@
                     <i class="home-product-item_star--gold fa-solid fa-star"></i>
                     <i class="fa-solid fa-star"></i>
                 </div>
-                <span class="home-product-item__sold">Đã bán</span>
+                <span class="home-product-item__sold">Hàng mới</span>
             </div>
             <!-- Branch and Product Source -->
             <div class="home-product-item__origin">
-                <span class="home-product-item__branch">Converse</span>
-                <span class="home-product-item__source">USA</span>
+                <span class="home-product-item__branch">{{ product.category.name }}</span>
+                <span class="home-product-item__source">{{ product.supplier.name }}</span>
             </div>
             <!-- Favourite -->
             <div class="home-product-item__favourite">
                 <i class="fa-solid fa-check"></i>
-                <span>Giảm 10% giá</span>
+                <span>Được yêu thích</span>
             </div>
         </a>                   
     </div>
@@ -73,7 +73,7 @@ let products = ref([
     },
 ]);
 
-const fecthProducts = async () => {
+const fetchProducts = async () => {
     try {
         const response = await axios.get('http://localhost:8762/ps/product/get');
         products.value = response.data;
@@ -83,7 +83,7 @@ const fecthProducts = async () => {
 };
 
 onMounted(() => {
-    fecthProducts();
+    fetchProducts();
 });
 
 </script>

@@ -10,7 +10,10 @@
     </h3>
     <!-- List item -->
     <ul class="category-list">
-        <li v-for="(x, index) in categories" class="category-item category-link--active">
+        <li class="category-item category-link--active">
+          <a href="./home" class="category-link">Tất cả</a>
+        </li>
+        <li v-for="(x, index) in categories" class="category-item category-link--active" :key="index">
           <a href="" class="category-link">{{ x.name }}</a>
         </li>
     </ul>
@@ -22,8 +25,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-
-
+// Define a ref to store the categories and fetch them from the API - B20DCCN728
 let categories = ref([]);
 const fetchCategories = async () => {
   try {

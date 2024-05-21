@@ -21,7 +21,6 @@ import Header from '@/components/customer/Header.vue';
             </div>
         </div>
     </div>
-    </div>
 </div>
 <Footer></Footer>
 </template>
