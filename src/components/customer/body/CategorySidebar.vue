@@ -9,6 +9,7 @@
         Danh Mục
     </h3>
     <!-- List item -->
+
     <ul class="category-list">
         <li class="category-item category-link--active">
           <a href="./home" class="category-link">Tất cả</a>
