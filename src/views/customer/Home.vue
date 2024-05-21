@@ -4,6 +4,7 @@ import CategorySidebar from '@/components/customer/body/CategorySidebar.vue';
 import Toolbar from '@/components/customer/body/Toolbar.vue';
 import ProductGrid from '@/components/customer/body/ProductGrid.vue';
 import Header from '@/components/customer/Header.vue';
+import Card from '@/components/customer/body/Card.vue';
 </script>
 <template>
 <!-- header -->
@@ -21,7 +22,10 @@ import Header from '@/components/customer/Header.vue';
             </div>
         </div>
     </div>
-    <div class="">   Hello word</div>
+    <!-- Card component -->
+    <div class="app__content column__card">
+        <Card></Card>
+    </div>
 </div>
 <Footer></Footer>
 </template>
@@ -35,5 +39,11 @@ import Header from '@/components/customer/Header.vue';
 
 .app__content {
   padding-top: 36px;
+}
+
+.column__card {
+    width: 400px;
+    padding-left: 20px;
+    padding-right: 5px;
 }
 </style>
