@@ -5,7 +5,7 @@
     <div class="card__body">
       <ul class="card_list">
         <li class="card_item">
-          <a href="#" class="card_item-link">
+          <div class="card_item-link">
             <img
               class="card_item-img" 
               src="https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg"
@@ -13,11 +13,53 @@
             <div class="card_item-content">
               <h3 class="card_item-title">Tên sản phẩm</h3>
               <p class="card_item-price">Giá: 1.200.000đ</p>
-              <p class="card_item-quantity">Số lượng: 1</p>
+              <label class="card_item-quantity">Số lượng: </label>
+              <a-input-number id="inputNumber" v-model:value="value" :min="1" :max="10" />
             </div>
-          </a>
+            <div class="card_item-remove">
+              <a-button type="primary" danger>Remove</a-button>
+            </div>
+          </div>
+        </li>
+        <li class="card_item">
+          <div class="card_item-link">
+            <img
+              class="card_item-img" 
+              src="https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg"
+            >
+            <div class="card_item-content">
+              <h3 class="card_item-title">Tên sản phẩm</h3>
+              <p class="card_item-price">Giá: 1.200.000đ</p>
+              <label class="card_item-quantity">Số lượng: </label>
+              <a-input-number id="inputNumber" v-model:value="value" :min="1" :max="10" />
+            </div>
+            <div class="card_item-remove">
+              <a-button type="primary" danger>Remove</a-button>
+            </div>
+          </div>
+        </li>
+        <li class="card_item">
+          <div class="card_item-link">
+            <img
+              class="card_item-img" 
+              src="https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg"
+            >
+            <div class="card_item-content">
+              <h3 class="card_item-title">Tên sản phẩm</h3>
+              <p class="card_item-price">Giá: 1.200.000đ</p>
+              <label class="card_item-quantity">Số lượng: </label>
+              <a-input-number id="inputNumber" v-model:value="value" :min="1" :max="10" />
+            </div>
+            <div class="card_item-remove">
+              <a-button type="primary" danger>Remove</a-button>
+            </div>
+          </div>
         </li>
       </ul>
+      <div class="card_total">
+        <h2 class="card__total-detail">Số lượng sản phẩm: 100</h2>
+        <h2 class="card__total-detail">Tổng tiền: 3.600.000đ</h2>
+      </div>
     </div>
     <div class="card__footer">
       <!-- start | end |center |baseline -->
@@ -64,12 +106,13 @@
 }
 
 .card_item {
-  
+  margin-bottom: 10px;
 }
 
 .card_item-link {
   display: flex;
-  justify-content: first baseline;
+  justify-content:space-between;
+  align-items: center;
 }
 
 .card_item-img {
@@ -79,6 +122,49 @@
   background-position: center;
 }
 
+.card_item-content {
+  margin-left: 18px;
+  width: 60%;
+}
+
+.card_item-title {
+  padding: 0;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--black-color);
+}
+
+.card_item-price {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--black-color);
+  padding-top: 2px;
+  margin: 0;
+}
+
+.card_item-quantity {
+  font-size: 1.6rem;
+  font-weight: 400;
+  padding-top: 2px;
+  color: var(--black-color);
+  margin: 0;
+}
+
+.card_total {
+  margin: 20px 0;
+  padding-left: 10px;
+}
+
+.card__total-detail {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.card__total-detail:first-child {
+  padding-bottom: 10px;
+}
 /* Card footer */
 .card__footer {
   display: flex;

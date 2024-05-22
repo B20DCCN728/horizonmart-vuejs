@@ -1,24 +1,29 @@
+<script setup>
+import SearchBar from './SearchBar.vue';
+</script>
+
 <template>
 <!-- Home filter -->
 <div class="home-filter">
     <span class="home-filter__label">Sắp xếp theo</span>
-    <button class="home-filter__btn btn">Tồn kho</button>
-    <button class="home-filter__btn btn btn--primary">Mới nhất</button>
-    <button class="home-filter__btn btn">Bán chạy</button>
+    <SearchBar />
+    <!-- <button class="home-filter__btn btn btn--primary">Mới nhất</button>
+    <button class="home-filter__btn btn">Bán chạy</button> -->
     <div class="select-input">  
-    <span class="select-input__label">Price</span>
-    <i class="select-input__icon fa-sharp fa-solid fa-chevron-down"></i>
-    <!-- List option -->
-    <ul class="select-input__list">
-        <li class="select-input__item">
-            <a href="#" class="select-input__link">Giá: Thấp đến cao</a>
-        </li>
-        <li class="select-input__item">
-            <a href="#" class="select-input__link">Giá: Cao đến thấp</a>
-        </li>
-    </ul> 
+      <span class="select-input__label">Price</span>
+      <i class="select-input__icon fa-sharp fa-solid fa-chevron-down"></i>
+      <!-- List option -->
+      <ul class="select-input__list">
+          <li class="select-input__item">
+              <a href="#" class="select-input__link">Giá: Thấp đến cao</a>
+          </li>
+          <li class="select-input__item">
+              <a href="#" class="select-input__link">Giá: Cao đến thấp</a>
+          </li>
+      </ul> 
     </div>
-    <div class="home-filter__page">
+    <!-- Paging -->
+    <!-- <div class="home-filter__page">
         <span class="home-filter__page-num">
             <span class="home-filter__page-current">1</span>/14
         </span>
@@ -30,7 +35,7 @@
             <i class="home-filter__page-icon fa-sharp fa-solid fa-chevron-right"></i>
             </a>
         </div>
-    </div>
+    </div> -->
 </div>
 </template>
 
@@ -105,5 +110,16 @@
 
 .home-filter__page-btn--disable .home-filter__page-icon {
   color: #286822;
+}
+
+.select-input {
+  position: relative;
+  margin-left: 16px;
+  border-radius: 4px;
+}
+
+.select-input__list {
+  z-index: 1;
+  border-radius: 4px;
 }
 </style>
