@@ -3,8 +3,25 @@
       <h1>Giỏ hàng của bạn</h1>
     </div>
     <div class="card__body">
-      <ul class="card_list">
+      <ul class="card_list" v-for="(product, index) in myOrder.products" :key="index">
         <li class="card_item">
+          <div class="card_item-link">
+            <img
+              class="card_item-img" 
+              :src="product.product.imagePath"
+            >
+            <div class="card_item-content">
+              <h3 class="card_item-title">{{ product.product.name }}</h3>
+              <p class="card_item-price">Giá: {{ product.product.sellingPrice }}</p>
+              <label class="card_item-quantity">Số lượng: </label>
+              <a-input-number id="inputNumber" v-model:value="value" :min="1" :max="10" />
+            </div>
+            <div class="card_item-remove">
+              <a-button type="primary" danger>Remove</a-button>
+            </div>
+          </div>
+        </li>
+        <!-- <li class="card_item">
           <div class="card_item-link">
             <img
               class="card_item-img" 
@@ -37,24 +54,7 @@
               <a-button type="primary" danger>Remove</a-button>
             </div>
           </div>
-        </li>
-        <li class="card_item">
-          <div class="card_item-link">
-            <img
-              class="card_item-img" 
-              src="https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg"
-            >
-            <div class="card_item-content">
-              <h3 class="card_item-title">Tên sản phẩm</h3>
-              <p class="card_item-price">Giá: 1.200.000đ</p>
-              <label class="card_item-quantity">Số lượng: </label>
-              <a-input-number id="inputNumber" v-model:value="value" :min="1" :max="10" />
-            </div>
-            <div class="card_item-remove">
-              <a-button type="primary" danger>Remove</a-button>
-            </div>
-          </div>
-        </li>
+        </li> -->
       </ul>
       <div class="card_total">
         <h2 class="card__total-detail">Số lượng sản phẩm: 100</h2>
@@ -71,7 +71,72 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 
+// Define order
+let myOrder = ref(
+  {
+    "user": {
+        "id": 1
+    },
+    "products": [
+        {
+            "product": {
+              "id": 18,
+              "name": "AXHJASDFA",
+              "purchasePrice": 16000,
+              "sellingPrice": 19000,
+              "createdDate": "2024-04-15T15:30:00",
+              "imagePath": "https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg",
+              "description": "Hello dear",
+              "category": {
+                  "id": 1,
+                  "name": "Rau cu",
+                  "description": "Khu vực rau trong siêu thị đa dạng với một loạt các loại rau xanh từ cải bắp, cải xoong, bí đỏ cho đến rau cải nội địa và rau sạch từ các trang trại địa phương. Mỗi loại rau được sắp xếp gọn gàng, phản ánh sự tươi mới và sức khỏe."
+              },
+              "supplier": {
+                  "id": 1,
+                  "name": "Viet gap",
+                  "address": "Ha noi",
+                  "phoneNumber": "0337176055",
+                  "taxID": "1200123",
+                  "description": "Luon cung cap rau ngon bo re cho mn"
+              }
+            },
+            "quantity": 10,
+            "sellingPrice": 10000
+        },
+        {
+            "product": {
+              "id": 18,
+              "name": "AXHJASDFA",
+              "purchasePrice": 16000,
+              "sellingPrice": 19000,
+              "createdDate": "2024-04-15T15:30:00",
+              "imagePath": "https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg",
+              "description": "Hello dear",
+              "category": {
+                  "id": 1,
+                  "name": "Rau cu",
+                  "description": "Khu vực rau trong siêu thị đa dạng với một loạt các loại rau xanh từ cải bắp, cải xoong, bí đỏ cho đến rau cải nội địa và rau sạch từ các trang trại địa phương. Mỗi loại rau được sắp xếp gọn gàng, phản ánh sự tươi mới và sức khỏe."
+              },
+              "supplier": {
+                  "id": 1,
+                  "name": "Viet gap",
+                  "address": "Ha noi",
+                  "phoneNumber": "0337176055",
+                  "taxID": "1200123",
+                  "description": "Luon cung cap rau ngon bo re cho mn"
+              }
+            },
+            "quantity": 10,
+            "sellingPrice": 10000
+        },
+    ],
+    "total": 400000,
+    "note": "THANH TOÁN THÀNH CÔNG"
+  }
+);
 </script>
 
 <style scoped>

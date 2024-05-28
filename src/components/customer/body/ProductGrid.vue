@@ -3,7 +3,7 @@
 <div class="home-product">
 <!--Create 1 - Row  -->
 <div class="grid__row">
-    <div class="grid__column-2-4" v-for="(product, index) in products" :key="index">
+    <div class="grid__column-2-4" v-for="(product, index) in fetchedProducts" :key="index">
         <a class="home-product-item" href="#">
             <!-- Product img -->
             <div class="home-product-item__img" style="background-image: url(https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg)"></div>
@@ -48,7 +48,8 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-let products = ref([
+// Define list products
+let fetchedProducts = ref([
     {
         "id": 18,
         "name": "AXHJASDFA",
@@ -73,10 +74,11 @@ let products = ref([
     },
 ]);
 
+// Fetch products
 const fetchProducts = async () => {
     try {
         const response = await axios.get('http://localhost:8762/ps/product/get');
-        products.value = response.data;
+        fetchedProducts.value = response.data;
     } catch (error) {
         console.error(error);
     }
