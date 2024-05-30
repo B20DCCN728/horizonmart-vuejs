@@ -4,7 +4,7 @@
 <!--Create 1 - Row  -->
 <div class="grid__row">
     <div class="grid__column-2-4" v-for="(product, index) in fetchedProducts" :key="index">
-        <a class="home-product-item" href="#">
+        <div class="home-product-item" @click="addToCard(product)">
             <!-- Product img -->
             <div class="home-product-item__img" style="background-image: url(https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg)"></div>
             <!-- Title -->
@@ -38,14 +38,14 @@
                 <i class="fa-solid fa-check"></i>
                 <span>Được yêu thích</span>
             </div>
-        </a>                   
+          </div>                   
     </div>
 </div>
 </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineEmits } from 'vue';
 import axios from 'axios';
 
 // Define list products
@@ -73,6 +73,13 @@ let fetchedProducts = ref([
         }
     },
 ]);
+
+// Create emit to pass data to parent
+const emit = defineEmits(['add-to-cart']);
+const addToCard = (product) => {
+  console.log('Add to cart', product);
+  emit('add-to-cart', product);
+}
 
 // Fetch products
 const fetchProducts = async () => {

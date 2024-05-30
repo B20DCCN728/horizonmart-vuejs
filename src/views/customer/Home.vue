@@ -1,10 +1,22 @@
 <script setup>
+import { ref } from 'vue';
 import Footer from '@/components/customer/Footer.vue';
 import CategorySidebar from '@/components/customer/body/CategorySidebar.vue';
 import Toolbar from '@/components/customer/body/Toolbar.vue';
 import ProductGrid from '@/components/customer/body/ProductGrid.vue';
 import Header from '@/components/customer/Header.vue';
 import Card from '@/components/customer/body/Card.vue';
+
+// 
+const cart = ref();
+
+// Receive product data from ProductGrid component and pass it to Card component
+const handleProduct = async (product) => {
+    console.log('Home', product);
+    cart.value = product;
+    console.log('Home', cart.value);
+}
+
 </script>
 <template>
 <!-- header -->
@@ -18,13 +30,13 @@ import Card from '@/components/customer/body/Card.vue';
             <!-- Components -->
             <div class="grid__column-10">
                 <Toolbar></Toolbar>
-                <ProductGrid></ProductGrid>
+                <ProductGrid @add-to-cart="handleProduct"></ProductGrid>
             </div>
         </div>
     </div>
     <!-- Card component -->
     <div class="app__content column__card">
-        <Card></Card>
+        <Card :product="cart"></Card>
     </div>
 </div>
 <Footer></Footer>

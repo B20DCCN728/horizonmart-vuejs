@@ -57,8 +57,8 @@
         </li> -->
       </ul>
       <div class="card_total">
-        <h2 class="card__total-detail">Số lượng sản phẩm: 100</h2>
-        <h2 class="card__total-detail">Tổng tiền: 3.600.000đ</h2>
+        <h2 class="card__total-detail">Số lượng sản phẩm: {{ myOrder.quantity }}</h2>
+        <h2 class="card__total-detail">Tổng tiền: {{ myOrder.total }}đ</h2>
       </div>
     </div>
     <div class="card__footer">
@@ -71,7 +71,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, defineProps, watch, reactive } from 'vue';
+
+// Define props
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true,
+  },
+});
 
 // Define order
 let myOrder = ref(
@@ -80,63 +88,30 @@ let myOrder = ref(
         "id": 1
     },
     "products": [
-        {
-            "product": {
-              "id": 18,
-              "name": "AXHJASDFA",
-              "purchasePrice": 16000,
-              "sellingPrice": 19000,
-              "createdDate": "2024-04-15T15:30:00",
-              "imagePath": "https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg",
-              "description": "Hello dear",
-              "category": {
-                  "id": 1,
-                  "name": "Rau cu",
-                  "description": "Khu vực rau trong siêu thị đa dạng với một loạt các loại rau xanh từ cải bắp, cải xoong, bí đỏ cho đến rau cải nội địa và rau sạch từ các trang trại địa phương. Mỗi loại rau được sắp xếp gọn gàng, phản ánh sự tươi mới và sức khỏe."
-              },
-              "supplier": {
-                  "id": 1,
-                  "name": "Viet gap",
-                  "address": "Ha noi",
-                  "phoneNumber": "0337176055",
-                  "taxID": "1200123",
-                  "description": "Luon cung cap rau ngon bo re cho mn"
-              }
-            },
-            "quantity": 10,
-            "sellingPrice": 10000
-        },
-        {
-            "product": {
-              "id": 18,
-              "name": "AXHJASDFA",
-              "purchasePrice": 16000,
-              "sellingPrice": 19000,
-              "createdDate": "2024-04-15T15:30:00",
-              "imagePath": "https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg",
-              "description": "Hello dear",
-              "category": {
-                  "id": 1,
-                  "name": "Rau cu",
-                  "description": "Khu vực rau trong siêu thị đa dạng với một loạt các loại rau xanh từ cải bắp, cải xoong, bí đỏ cho đến rau cải nội địa và rau sạch từ các trang trại địa phương. Mỗi loại rau được sắp xếp gọn gàng, phản ánh sự tươi mới và sức khỏe."
-              },
-              "supplier": {
-                  "id": 1,
-                  "name": "Viet gap",
-                  "address": "Ha noi",
-                  "phoneNumber": "0337176055",
-                  "taxID": "1200123",
-                  "description": "Luon cung cap rau ngon bo re cho mn"
-              }
-            },
-            "quantity": 10,
-            "sellingPrice": 10000
-        },
     ],
-    "total": 400000,
+    "quantity": 0,
+    "total": 0,
     "note": "THANH TOÁN THÀNH CÔNG"
   }
 );
+
+// Watch props.product to add product to order and calculate total & quantity
+watch(() => props.product, async (newVal, oldVal) => {
+  console.log('Card', newVal);
+    myOrder.value.products.push(
+      {
+        "product": newVal,
+        "quantity": 1,
+        "sellingPrice": newVal.sellingPrice
+      }
+    );
+    myOrder.value.quantity += 1;
+    myOrder.value.total += newVal.sellingPrice;
+    myOrder.value.note = "THANH TOÁN THÀNH CÔNG";
+  },
+  { deep: true } // To watch object properties
+)
+
 </script>
 
 <style scoped>
