@@ -14,7 +14,7 @@
               <h3 class="card_item-title">{{ product.product.name }}</h3>
               <p class="card_item-price">Giá: {{ product.product.sellingPrice }}</p>
               <label class="card_item-quantity">Số lượng: </label>
-              <a-input-number id="inputNumber" v-model:value="value" :min="1" :max="10" />
+              <a-input-number id="inputNumber" v-model:value="product.quantity" :min="1" :max="1000" />
             </div>
             <div class="card_item-remove">
               <a-button type="primary" danger>Remove</a-button>
@@ -82,7 +82,7 @@ const props = defineProps({
 });
 
 // Define order
-let myOrder = ref(
+let myOrder = reactive(
   {
     "user": {
         "id": 1
@@ -98,19 +98,25 @@ let myOrder = ref(
 // Watch props.product to add product to order and calculate total & quantity
 watch(() => props.product, async (newVal, oldVal) => {
   console.log('Card', newVal);
-    myOrder.value.products.push(
-      {
-        "product": newVal,
-        "quantity": 1,
-        "sellingPrice": newVal.sellingPrice
-      }
-    );
-    myOrder.value.quantity += 1;
-    myOrder.value.total += newVal.sellingPrice;
-    myOrder.value.note = "THANH TOÁN THÀNH CÔNG";
-  },
-  { deep: true } // To watch object properties
-)
+  myOrder.products.push(
+    {
+      "product": newVal,
+      "quantity": 1,
+      "price": newVal.sellingPrice
+    }
+  );
+  myOrder.total += newVal.sellingPrice;
+  console.log(myOrder.total);
+});
+
+// watch(() => myOrder.products, (newVal, oldVal) => {
+//     myOrder.quantity += 1;
+//     console.log(myOrder);
+//     myOrder.total += newVal.sellingPrice;
+//     console.log(myOrder.total);
+//   }, 
+//   { deep: true }
+// );
 
 </script>
 

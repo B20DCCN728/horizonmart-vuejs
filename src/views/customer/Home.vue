@@ -8,7 +8,20 @@ import Header from '@/components/customer/Header.vue';
 import Card from '@/components/customer/body/Card.vue';
 
 // 
-const cart = ref();
+const cart = ref({
+    "id": 1,
+    "name": "Product",
+    "description": "Description",
+    "sellingPrice": 100,
+    "discount": 10,
+    "quantity": 10,
+    "category": {
+        "id": 1,
+        "name": "Category"
+    },
+    "image": "https://via.placeholder.com/150",
+    "status": "ACTIVE"
+});
 
 // Receive product data from ProductGrid component and pass it to Card component
 const handleProduct = async (product) => {
