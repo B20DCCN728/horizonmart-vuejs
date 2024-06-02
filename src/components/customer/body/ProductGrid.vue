@@ -6,7 +6,7 @@
     <div class="grid__column-2-4" v-for="(product, index) in fetchedProducts" :key="index">
         <div class="home-product-item" @click="addToCard(product)">
             <!-- Product img -->
-            <div class="home-product-item__img" style="background-image: url(https://i.pinimg.com/originals/bf/fa/cb/bffacb16c45d8efb3e3ed884005ed7d5.jpg)"></div>
+            <div class="home-product-item__img" :style="{ backgroundImage: `url(${product.imagePath})` }"></div>
             <!-- Title -->
             <h4 class="home-product-item__name">{{ product.name}}</h4>
             <div class="home-product-item__price">
@@ -56,7 +56,7 @@ let fetchedProducts = ref([
         "purchasePrice": 16000,
         "sellingPrice": 19000,
         "createdDate": "2024-04-15T15:30:00",
-        "imagePath": "http://localhost:8762/ps/product/image/Screenshot 2024-03-18 221542.png",
+        "imagePath": "",
         "description": "Hello dear",
         "category": {
             "id": 1,

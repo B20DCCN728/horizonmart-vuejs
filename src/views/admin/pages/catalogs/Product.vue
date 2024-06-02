@@ -135,14 +135,18 @@ const rowSelection = computed(() => {
 
 // Setting drawer
 const form = reactive({
-  "supplierId": 1,
-  "categoryId": 1, // "category": { "id": 1, "name": "Rau cu", "description": "Chu de ve rau qua thuc pham " },
-  "name": "Thịt lợn",
-  "purchasePrice": 16000,
-  "sellingPrice": 19000,
-  "createdDate": "2024-04-15T15:30:00",
-  "imagePath": "http://localhost:8762/ps/product/image/hello.jpg",
-  "description": "Hello dear",
+  "supplier": {
+    "id": null,
+  },
+  "category": {
+    "id": null,
+  }, // "category": { "id": 1, "name": "Rau cu", "description": "Chu de ve rau qua thuc pham " },
+  "name": "",
+  "purchasePrice": "",
+  "sellingPrice": "",
+  "createdDate": "",
+  "imagePath": "",
+  "description": "",
 });
 
 // const rules = {
@@ -211,26 +215,49 @@ const resetForm = () => {
   form.name = '';
   form.purchasePrice = '';
   form.sellingPrice = '';
-  form.supplierId = '';
-  form.categoryId = '12';
+  form.supplier.id = '';
+  form.category.id = '';
   form.description = '';
   form.quantity = '';
   form.imagePath = '';
   fileList.value = [];
 };
 
+const handleSelectedCategory = async (value) => {
+  form.category.id = value;
+};
+
+const handleSelectedSupplier = async (value) => {
+  form.supplier.id = value;
+}
+
 const handleSubmit = async () => {
-  console.log(form.name);
-  const request = await axios.post(
+  // POST request using axios with async/await to create a new product
+  await axios.post(
     'http://localhost:8762/ps/product/create', 
     form
-  );
-  message.success('create product success');
-  const response = await axios.get('http://localhost:8762/ps/product/get');
-  open.value = false;
-  resetForm();
-  console.log(response.data);
-  dataSource.value = response.data;
+  ).then(response => {
+    const isSuccess = response.data;
+    if (isSuccess) {
+      message.success('create product success');
+    } else {
+      message.error('create product failed');
+    }
+  }).catch(error => {
+    // Handle any errors that occur during the request
+    console.error('There was an error creating the product:', error);
+  });
+
+  // GET request using axios with async/await to get all products
+  await axios.get('http://localhost:8762/ps/product/get')
+    .then(response => {
+      open.value = false;
+      resetForm();
+      dataSource.value = response.data;
+    }).catch(error => {
+      // Handle any errors that occur during the request
+      console.error('There was an error getting the product:', error);
+    });
 };
 
 const updateProduct = async (id) => {
@@ -403,12 +430,12 @@ const handleChange = info => {
             <a-row :gutter="16">
               <a-col :span="12">
                 <a-form-item label="Danh mục" name="category">
-                  <SelectCategory />
+                  <SelectCategory @category-selected="handleSelectedCategory" />
                 </a-form-item>
               </a-col>
               <a-col :span="12">
                 <a-form-item label="Nhà cung cấp" name="supplier">
-                  <SelectSupplier />
+                  <SelectSupplier @supplier-selected="handleSelectedSupplier" />
                 </a-form-item>
               </a-col>
             </a-row>

@@ -84,9 +84,9 @@ const props = defineProps({
 // Define order
 let myOrder = reactive(
   {
-    "user": {
-        "id": 1
-    },
+    // "user": {
+    //     "id": 1
+    // },
     "products": [
     ],
     "quantity": 0,

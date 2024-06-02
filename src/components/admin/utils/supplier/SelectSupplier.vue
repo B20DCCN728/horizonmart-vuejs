@@ -9,7 +9,7 @@
       :not-found-content="state.fetching ? undefined : null"
       :options="state.data"
       @search="fetchUser"
-      @change="fetchUser"
+      @change="handleChange"
       @click="fetchUser('')"
     >
         <template v-if="state.fetching" #notFoundContent>
@@ -18,7 +18,7 @@
     </a-select>
 </template>
 <script setup>
-    import { reactive, watch } from 'vue';
+    import { reactive, watch, defineEmits } from 'vue';
     import { debounce } from 'lodash-es';
 
     let lastFetchId = 0;
@@ -29,6 +29,9 @@
         value: [],
         fetching: false,
     });
+
+    // Create emit to pass data to parent
+    const emit = defineEmits(['supplier-selected']);
 
     const fetchUser = debounce(value => {
         console.log('fetching user', value);
@@ -63,6 +66,11 @@
                 state.fetching = false;
             });
     }, 300);
+
+    const handleChange = async value => {
+        state.value = value; 
+        emit('supplier-selected', value.value);
+    };
 
     // Update
     watch(state.value, () => {
