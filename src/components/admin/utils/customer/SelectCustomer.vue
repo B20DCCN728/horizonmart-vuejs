@@ -4,7 +4,7 @@
       show-search
       placeholder="Chọn khách hàng"
       label-in-value
-      style="width: 100%"
+      style="width: 300px"
       :filter-option="false"
       :not-found-content="state.fetching ? undefined : null"
       :options="state.data"

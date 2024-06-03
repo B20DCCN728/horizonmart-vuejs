@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
 import Footer from '@/components/customer/Footer.vue';
 import CategorySidebar from '@/components/customer/body/CategorySidebar.vue';
 import Toolbar from '@/components/customer/body/Toolbar.vue';
@@ -7,9 +8,17 @@ import ProductGrid from '@/components/customer/body/ProductGrid.vue';
 import Header from '@/components/customer/Header.vue';
 import Card from '@/components/customer/body/Card.vue';
 import SelectCustomer from '@/components/admin/utils/customer/SelectCustomer.vue';
+import { notification } from 'ant-design-vue';
 
-// 
+// open modal
 const open = ref(false);
+
+// customer datam
+const customer = ref({
+    fullName: '',
+    phoneNumber: '',
+    note: ''
+});
 
 const cart = ref({
     "id": 1,
@@ -38,6 +47,45 @@ const handleOpenModal = async () => {
     open.value = true;
 };
 
+// add new customer
+const showAddNewCustomerForm = ref("none");
+const addNewCustomerForm = async () => {
+    if (showAddNewCustomerForm.value === "none") {
+        showAddNewCustomerForm.value = "";
+    } else {
+        showAddNewCustomerForm.value = "none";
+    }
+};
+
+// create new customer
+const confirmLoading = ref(false);
+const createNewCustomer = async () => {
+    confirmLoading.value = true;
+    axios.post('http://localhost:8762/us/user/create', customer.value)
+    .then(response => {
+        console.log(response.data);
+        confirmLoading.value = false;
+        if (response.data == true) {
+            notification.success({
+                message: 'Thông báo',
+                description: 'Tạo mới khách hàng thành công!!'
+            });       
+        } else {
+            notification.error({
+                message: 'Thông báo',
+                description: 'Khách hàng đã tồn tại vui lòng thêm số điện thoại mới!!'
+            });
+        }
+    }).catch(error => {
+        console.error(error);
+        notification.error({
+            message: 'Thông báo',
+            description: 'Tạo mới khách hàng không thành công!!'
+        });
+        confirmLoading.value = false;
+    });
+};
+
 </script>
 <template>
 <!-- header -->
@@ -46,13 +94,20 @@ const handleOpenModal = async () => {
 <div class="app__container">
     <a-modal v-model:open="open" title="Chi tiết đơn hàng" :confirm-loading="confirmLoading" @ok="handleOk">
         <a-divider>Khách hàng</a-divider>
-        <select-customer></select-customer>
-        <a-space style="display: none">
-            <a-input placeholder="Nhập tên khách hàng"></a-input>
-            <a-input placeholder="Nhập số điện thoại"></a-input>
+        <a-space :size="10" align="center" style="margin-bottom: 20px;">
+            <a-button type="primary" @click="addNewCustomerForm" danger style="margin-left: 10px;">Thêm Khách Hàng</a-button>
+            <select-customer></select-customer>
+        </a-space>
+        <a-typography-title :level="5" :style="{ display: `${ showAddNewCustomerForm }`}">Vui lòng nhập đầy đủ thông tin!!</a-typography-title>
+        <a-space direction="horizontal" align="center" :style="{ display: `${ showAddNewCustomerForm }`}">
+            <a-input size="100%" placeholder="Nhập tên khách hàng" v-model:value="customer.fullName"></a-input>
+            <a-input placeholder="Nhập số điện thoại" v-model:value="customer.phoneNumber"></a-input>
+            <a-button danger block @click="createNewCustomer" :loading="confirmLoading">
+                Tạo mới
+            </a-button>
         </a-space>
         <a-divider>Giỏ hàng</a-divider>
-        <div class="card__body">
+        <div class="card__body scroll-container">
             <ul class="card_list" >
                 <li class="card_item">
                     <div class="card_item-link">
@@ -159,6 +214,13 @@ const handleOpenModal = async () => {
 
 .app__content {
   padding-top: 36px;
+}
+
+.scroll-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
 }
 
 .column__card {
