@@ -65,13 +65,13 @@ const addNewCustomerForm = async () => {
 };
 
 // create new customer
-const confirmLoading = ref(false);
+const confirmCreateCusLoading = ref(false);
 const createNewCustomer = async () => {
-    confirmLoading.value = true;
+    confirmCreateCusLoading.value = true;
     axios.post('http://localhost:8762/us/user/create', customer.value)
     .then(response => {
         console.log(response.data);
-        confirmLoading.value = false;
+        confirmCreateCusLoading.value = false;
         if (response.data == true) {
             notification.success({
                 message: 'Thông báo',
@@ -89,7 +89,7 @@ const createNewCustomer = async () => {
             message: 'Thông báo',
             description: 'Tạo mới khách hàng không thành công!!'
         }); 
-        confirmLoading.value = false;
+        confirmCreateCusLoading.value = false;
     });
 };
 
@@ -106,6 +106,7 @@ const handleCustomerSelected = async (customerSelected) => {
         customer.value.phoneNumber = response.data.phoneNumber;
         showCustomerInfoForm.value = "";
         console.log('Customer', customer.value);
+        myOrder.value.user = response.data;
         spinning.value = false;
     }).catch(error => {
         console.error(error);
@@ -114,13 +115,41 @@ const handleCustomerSelected = async (customerSelected) => {
 
 };
 
+const confirmCreateOrderLoading = ref(false);
+const handleOk = async () => {
+    confirmCreateOrderLoading.value = true;
+    axios.post('http://localhost:8762/os/order/create', myOrder.value)
+    .then(response => {
+        console.log(response.data);
+        confirmCreateOrderLoading.value = false;
+        if (response.data == true) {
+            notification.success({
+                message: 'Thông báo',
+                description: 'Tạo mới đơn hàng thành công!!'
+            });       
+        } else {
+            notification.error({
+                message: 'Thông báo',
+                description: 'Tạo mới đơn hàng không thành công!!'
+            });
+        }
+    }).catch(error => {
+        console.error(error);
+        notification.error({
+            message: 'Thông báo',
+            description: 'Tạo mới đơn hàng không thành công!!'
+        }); 
+        confirmCreateOrderLoading.value = false;
+    });
+};
+
 </script>
 <template>
 <!-- header -->
 <Header></Header>
 <!-- container -->
 <div class="app__container">
-    <a-modal v-model:open="open" title="Chi tiết đơn hàng" :confirm-loading="confirmLoading" @ok="handleOk">
+    <a-modal v-model:open="open" title="Chi tiết đơn hàng" :confirm-loading="confirmCreateOrderLoading" okText="Payment" @ok="handleOk">
         <a-divider>Khách hàng</a-divider>
         <a-space :size="10" align="center" style="margin-bottom: 20px;">
             <a-button type="primary" @click="addNewCustomerForm" danger style="margin-left: 10px;">Thêm Khách Hàng</a-button>
@@ -130,7 +159,7 @@ const handleCustomerSelected = async (customerSelected) => {
         <a-space direction="horizontal" align="center" :style="{ display: `${ showAddNewCustomerForm }`}">
             <a-input size="100%" placeholder="Nhập tên khách hàng" v-model:value="customer.fullName"></a-input>
             <a-input placeholder="Nhập số điện thoại" v-model:value="customer.phoneNumber"></a-input>
-            <a-button danger block @click="createNewCustomer" :loading="confirmLoading">
+            <a-button danger block @click="createNewCustomer" :loading="confirmCreateCusLoading">
                 Tạo mới
             </a-button>
         </a-space>

@@ -112,6 +112,7 @@ watch(() => props.product, async (newVal, oldVal) => {
     }
   );
   myOrder.total += newVal.sellingPrice;
+  myOrder.quantity += 1;
   console.log(myOrder.total);
 });
 
