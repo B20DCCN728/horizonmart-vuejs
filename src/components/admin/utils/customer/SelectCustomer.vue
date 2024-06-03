@@ -2,7 +2,7 @@
     <a-select
       v-model:value="state.value"
       show-search
-      placeholder="Chọn khách hàng"
+      placeholder="Tìm khách hàng"
       label-in-value
       style="width: 300px"
       :filter-option="false"
@@ -31,7 +31,7 @@
     });
     
     // Create emit to pass data to parent
-    const emit = defineEmits(['category-selected']);
+    const emit = defineEmits(['customer-selected']);
 
     const fetchUser = debounce(value => {
         console.log('fetching category', value);
@@ -42,11 +42,11 @@
         let path = '';
         switch (value) {
             case '': {
-                path = `http://localhost:8762/ps/product/category/get-all`;
+                path = `http://localhost:8762/us/user/all`;
                 break;
             }
             default: {
-                path = `http://localhost:8762/ps/product/category/search/${value}`;
+                path = `http://localhost:8762/us/user/search/${value}`;
                 break;
             }
         }
@@ -57,10 +57,10 @@
                     // for fetch callback order
                     return;
                 }
-                console.log('fetching category success', body);
-                const data = body.map(category => ({
-                    label: `${category.name}`,
-                    value: category.id,
+                console.log('fetching customer success', body);
+                const data = body.map(customer => ({
+                    label: `${customer.fullName}`,
+                    value: customer.id
                 }));
                 state.data = data;
                 state.fetching = false;
@@ -69,7 +69,10 @@
 
     const handleChange = async value => {
         state.value = value; 
-        emit('category-selected', value.value);
+        emit('customer-selected', {
+            id: value.value,
+            fullName: value.label
+        });
     };
 
     watch(state.value, () => {

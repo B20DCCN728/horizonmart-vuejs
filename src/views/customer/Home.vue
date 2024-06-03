@@ -13,6 +13,9 @@ import { notification } from 'ant-design-vue';
 // open modal
 const open = ref(false);
 
+// spin
+const spinning = ref(false);
+
 // customer datam
 const customer = ref({
     fullName: '',
@@ -43,13 +46,17 @@ const handleProduct = async (product) => {
 };
 
 // Open modal
-const handleOpenModal = async () => {
+const myOrder = ref({
+});
+const handleOpenModal = async (order) => {
     open.value = true;
+    myOrder.value = order;
 };
 
 // add new customer
 const showAddNewCustomerForm = ref("none");
 const addNewCustomerForm = async () => {
+    showCustomerInfoForm.value = "none";
     if (showAddNewCustomerForm.value === "none") {
         showAddNewCustomerForm.value = "";
     } else {
@@ -81,9 +88,30 @@ const createNewCustomer = async () => {
         notification.error({
             message: 'Thông báo',
             description: 'Tạo mới khách hàng không thành công!!'
-        });
+        }); 
         confirmLoading.value = false;
     });
+};
+
+// handle customer selected
+const showCustomerInfoForm = ref("none");
+const handleCustomerSelected = async (customerSelected) => {
+    showCustomerInfoForm.value = "";
+    customer.value.id = customerSelected.id;
+    spinning.value = true;
+    axios.get(`http://localhost:8762/us/user/get/${customerSelected.id}`)
+    .then(response => {
+        console.log(response.data);
+        customer.value.fullName = response.data.fullName;
+        customer.value.phoneNumber = response.data.phoneNumber;
+        showCustomerInfoForm.value = "";
+        console.log('Customer', customer.value);
+        spinning.value = false;
+    }).catch(error => {
+        console.error(error);
+        spinning.value = false;
+    });
+
 };
 
 </script>
@@ -96,7 +124,7 @@ const createNewCustomer = async () => {
         <a-divider>Khách hàng</a-divider>
         <a-space :size="10" align="center" style="margin-bottom: 20px;">
             <a-button type="primary" @click="addNewCustomerForm" danger style="margin-left: 10px;">Thêm Khách Hàng</a-button>
-            <select-customer></select-customer>
+            <select-customer @customer-selected="handleCustomerSelected"></select-customer>
         </a-space>
         <a-typography-title :level="5" :style="{ display: `${ showAddNewCustomerForm }`}">Vui lòng nhập đầy đủ thông tin!!</a-typography-title>
         <a-space direction="horizontal" align="center" :style="{ display: `${ showAddNewCustomerForm }`}">
@@ -106,83 +134,38 @@ const createNewCustomer = async () => {
                 Tạo mới
             </a-button>
         </a-space>
+        <a-spin :spinning="spinning">
+            <a-typography-title :level="5" :style="{ display: `${ showCustomerInfoForm }`}">Thông tin khách hàng</a-typography-title>
+            <a-space class="customer_info" direction="vertical" :style="{ display: `${ showCustomerInfoForm }`}">
+                <div class="customer_info-value fullname">
+                    <p>Tên khách hàng: {{ customer.fullName }}</p>
+                </div>
+                <div class="customer_info-value phone-number">
+                    <p>Số điện thoại: {{ customer.phoneNumber }}</p>
+                </div>
+            </a-space>
+        </a-spin>
         <a-divider>Giỏ hàng</a-divider>
         <div class="card__body scroll-container">
-            <ul class="card_list" >
+            <ul class="card_list" v-for="(product, index) in myOrder.products" :key="index">
                 <li class="card_item">
-                    <div class="card_item-link">
+                    <h3 class="card_item-title">{{ index }} -> {{ product.product.name }}</h3>
+                    <div class="card_item-link" style="display: flex; justify-content:flex-start;">
                         <img 
-                            style="width: 12%;"
+                            style="width: 20%;"
                             class="card_item-img" 
-                            src="https://hcm.fstorage.vn/images/2023/06/f2b28fb31b2669af86a406bf0d7c4db3-20230628013145.png"
+                            :src="product.product.imagePath"
                         >
-                        <div class="card_item-content">
-                            <h3 class="card_item-title"></h3>
-                            <p class="card_item-price">Giá: 100.000</p>
-                            <label class="card_item-quantity">Số lượng: 100</label>
-                        </div>
-                    </div>
-                </li>
-                <li class="card_item">
-                    <div class="card_item-link">
-                        <img 
-                            style="width: 12%;"
-                            class="card_item-img" 
-                            src="https://hcm.fstorage.vn/images/2023/06/f2b28fb31b2669af86a406bf0d7c4db3-20230628013145.png"
-                        >
-                        <div class="card_item-content">
-                            <h3 class="card_item-title"></h3>
-                            <p class="card_item-price">Giá: 100.000</p>
-                            <label class="card_item-quantity">Số lượng: 100</label>
-                        </div>
-                    </div>
-                </li>
-                <li class="card_item">
-                    <div class="card_item-link">
-                        <img 
-                            style="width: 12%;"
-                            class="card_item-img" 
-                            src="https://hcm.fstorage.vn/images/2023/06/f2b28fb31b2669af86a406bf0d7c4db3-20230628013145.png"
-                        >
-                        <div class="card_item-content">
-                            <h3 class="card_item-title"></h3>
-                            <p class="card_item-price">Giá: 100.000</p>
-                            <label class="card_item-quantity">Số lượng: 100</label>
-                        </div>
-                    </div>
-                </li>
-                <li class="card_item">
-                    <div class="card_item-link">
-                        <img 
-                            style="width: 12%;"
-                            class="card_item-img" 
-                            src="https://hcm.fstorage.vn/images/2023/06/f2b28fb31b2669af86a406bf0d7c4db3-20230628013145.png"
-                        >
-                        <div class="card_item-content">
-                            <h3 class="card_item-title"></h3>
-                            <p class="card_item-price">Giá: 100.000</p>
-                            <label class="card_item-quantity">Số lượng: 100</label>
-                        </div>
-                    </div>
-                </li>
-                <li class="card_item">
-                    <div class="card_item-link">
-                        <img 
-                            style="width: 12%;"
-                            class="card_item-img" 
-                            src="https://hcm.fstorage.vn/images/2023/06/f2b28fb31b2669af86a406bf0d7c4db3-20230628013145.png"
-                        >
-                        <div class="card_item-content">
-                            <h3 class="card_item-title"></h3>
-                            <p class="card_item-price">Giá: 100.000</p>
-                            <label class="card_item-quantity">Số lượng: 100</label>
+                        <div class="card_item-content" style="margin-left: 40px;">
+                            <p class="card_item-price">Giá: {{ product.product.sellingPrice }}</p>
+                            <label class="card_item-quantity">Số lượng: {{ product.quantity }}</label>
                         </div>
                     </div>
                 </li>
             </ul>
             <div class="card_total">
-                <h2 class="card__total-detail">Số lượng sản phẩm: 1000</h2>
-                <h2 class="card__total-detail">Tổng tiền: 1.000.000đ</h2>
+                <h2 class="card__total-detail">Số lượng sản phẩm: {{ myOrder.quantity }}</h2>
+                <h2 class="card__total-detail">Tổng tiền: {{ myOrder.total }}VND</h2>
             </div>
         </div>
     </a-modal>
@@ -216,11 +199,21 @@ const createNewCustomer = async () => {
   padding-top: 36px;
 }
 
+.customer_info-value {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    font-weight: 450;
+}
+
 .scroll-container {
   max-height: 300px;
   overflow-y: auto;
   padding: 0;
-  margin: 0;
+  margin: 0 0 0 20px;
+}
+
+.card_list {
+    list-style: none;
 }
 
 .column__card {
@@ -228,4 +221,17 @@ const createNewCustomer = async () => {
     padding-left: 20px;
     padding-right: 5px;
 }
+
+.card_item-content p {
+    font-size: 1.6rem;
+    font-weight: 450;
+    color: var(--text-color);
+}
+
+.card_item-content label {
+    font-size: 1.6rem;
+    font-weight: 450;
+    color: var(--text-color);
+}
+
 </style>

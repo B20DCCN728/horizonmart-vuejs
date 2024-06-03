@@ -76,7 +76,7 @@ import { ref, defineProps, watch, reactive, defineEmits } from 'vue';
 // Define emits
 const emits = defineEmits(['open-modal']);
 const openModal = () => {
-  emits('open-modal', true);
+  emits('open-modal', myOrder);
 };
 
 // Define props
