@@ -2,7 +2,7 @@
     <a-select
       v-model:value="state.value"
       show-search
-      placeholder="Chọn nhà cung cấp"
+      placeholder="Chọn khách hàng"
       label-in-value
       style="width: 100%"
       :filter-option="false"
@@ -29,12 +29,12 @@
         value: [],
         fetching: false,
     });
-
+    
     // Create emit to pass data to parent
-    const emit = defineEmits(['supplier-selected']);
+    const emit = defineEmits(['category-selected']);
 
     const fetchUser = debounce(value => {
-        console.log('fetching user', value);
+        console.log('fetching category', value);
         lastFetchId += 1;
         const fetchId = lastFetchId;
         state.data = [];
@@ -42,11 +42,11 @@
         let path = '';
         switch (value) {
             case '': {
-                path = `http://localhost:8762/ss/supplier/all`;
+                path = `http://localhost:8762/ps/product/category/get-all`;
                 break;
             }
             default: {
-                path = `http://localhost:8762/ss/supplier/search/${value}`;
+                path = `http://localhost:8762/ps/product/category/search/${value}`;
                 break;
             }
         }
@@ -57,10 +57,10 @@
                     // for fetch callback order
                     return;
                 }
-                console.log('fetching supplier success', body);
-                const data = body.map(supplier => ({
-                    label: `${supplier.name} ${supplier.address}`,
-                    value: supplier.id,
+                console.log('fetching category success', body);
+                const data = body.map(category => ({
+                    label: `${category.name}`,
+                    value: category.id,
                 }));
                 state.data = data;
                 state.fetching = false;
@@ -69,10 +69,9 @@
 
     const handleChange = async value => {
         state.value = value; 
-        emit('supplier-selected', value.value);
+        emit('category-selected', value.value);
     };
 
-    // Update
     watch(state.value, () => {
         state.data = [];
         state.fetching = false;

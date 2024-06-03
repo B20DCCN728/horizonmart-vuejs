@@ -65,13 +65,19 @@
       <!-- start | end |center |baseline -->
       <a-space warp align="center">
         <a-button size="large" type="primary" danger>Reset giỏ</a-button>
-        <a-button size="large" type="primary">Tạo đơn hàng</a-button>
+        <a-button size="large" type="primary" @click="openModal">Tạo đơn hàng</a-button>
       </a-space>
     </div>
 </template>
 
 <script setup>
-import { ref, defineProps, watch, reactive } from 'vue';
+import { ref, defineProps, watch, reactive, defineEmits } from 'vue';
+
+// Define emits
+const emits = defineEmits(['open-modal']);
+const openModal = () => {
+  emits('open-modal', true);
+};
 
 // Define props
 const props = defineProps({
