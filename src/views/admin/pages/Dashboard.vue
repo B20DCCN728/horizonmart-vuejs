@@ -13,7 +13,7 @@
             <a-col :span="6">
               <StatisticRectangle 
                 title="Doanh thu"
-                :value="9.3"
+                :value="productStat.totalRevenue"
                 :precision="2"
                 suffix="%"
               />
@@ -21,7 +21,7 @@
             <a-col :span="6">
               <StatisticRectangle 
                 title="Đã bán"
-                :value="9.4"
+                :value="productStat.quantitySold"
                 :precision="2"
                 suffix="%"
               />
@@ -29,7 +29,7 @@
             <a-col :span="6">
               <StatisticRectangle 
                 title="Lợi nhuận"
-                :value="9.4"
+                :value="productStat.totalProfit"
                 :precision="2"
                 suffix="%"
               />
@@ -68,7 +68,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
 import PageHeader from '@/components/admin/utils/PageHeader.vue'
 import StatisticRectangle from '@/components/admin/utils/StatisticRectangle.vue'
 
@@ -184,6 +185,31 @@ const data = [
     address: 'London Park',
   },
 ];
+
+const productStat = ref({
+  "totalRevenue": 0,
+  "totalProfit": -406000,
+  "quantitySold": 5,
+});
+
+const fetchProductStat = async (from, to) => {
+  const encodedFrom = encodeURIComponent(from);
+  const encodedTo = encodeURIComponent(to);
+  try {
+    const res = await axios.get(`http://localhost:8762/ps/product/get-stat/${encodedFrom}/${encodedTo}`);
+    console.log(res.data);
+    productStat.value.totalRevenue = res.data.totalRevenue;
+    productStat.value.totalProfit = res.data.totalProfit;
+    productStat.value.quantitySold = res.data.quantitySold;
+    console.log(productStat.value);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+onMounted(() => {
+  fetchProductStat("2024-06-03 16:38:13", "2024-06-03 23:09:48");
+});
 
 </script>
 
