@@ -198,32 +198,7 @@ const productStat = ref({
   "quantitySold": 5,
 });
 
-const productStatDetailData = ref(
-  [
-    {
-      "id": 36,
-      "name": "Gạo ST25 Sóc Trăng",
-      "purchasePrice": 100000,
-      "sellingPrice": 130000,
-      "createdDate": "2024-06-01T16:05:11",
-      "imagePath": "http://localhost:8762/ps/product/image/162427264225210141040-g1-gao-tron-chou-huong-vinaseed-tyi-5kg-og.jpg",
-      "description": "Gạo ngon được sản xuất qua khu nông nghiệp chất lượng cao",
-      "category": {
-          "id": 13,
-          "name": "Thực phẩm khô",
-          "description": "Góc thực phẩm khô bao gồm các sản phẩm như gạo, đậu, mì, đồ khô và các loại gia vị. Các hàng hóa này thường được đóng gói sẵn và sắp xếp theo từng kệ, tạo ra một hình ảnh đầy màu sắc và hấp dẫn."
-      },
-      "supplier": {
-          "id": 8,
-          "name": "Chinsu",
-          "address": "HCM",
-          "phoneNumber": "012341234",
-          "taxID": "234123",
-          "description": "mì "
-      }
-    },    
-  ]
-);
+const productStatDetailData = ref([]);
 
 const fetchProductStat = async (from, to) => {
   const encodedFrom = encodeURIComponent(from);
@@ -234,7 +209,7 @@ const fetchProductStat = async (from, to) => {
     productStat.value.totalRevenue = res.data.totalRevenue;
     productStat.value.totalProfit = res.data.totalProfit;
     productStat.value.quantitySold = res.data.quantitySold;
-    productStatDetailData.value = res.data.products;
+    productStatDetailData.value = res.data.productStatDetails;
     console.log(productStat.value);
   } catch (error) {
     console.error(error);
