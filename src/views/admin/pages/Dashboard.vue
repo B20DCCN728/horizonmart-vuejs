@@ -60,7 +60,7 @@
                     format="YYYY-MM-DD HH:mm:ss"
                   />
                   <div><h1>{{ datePicker }}</h1></div>
-                  <a-button type="primary" danger @click="onFilterTime()">Filter</a-button>
+                  <a-button type="primary" danger :loading="loadingButton" @click="onFilterTime()">Filter</a-button>
                 </div>
             </a-col> 
           </a-row>
@@ -121,10 +121,12 @@ const disabledRangeTime = (_, type) => {
 };
 
 const datePicker = ref();
+const loadingButton = ref(false);
 
 const onFilterTime = async () => {
-  console.log(datePicker.value[0]);
-  fetchProductStat(datePicker.value[0], datePicker.value[1]);
+  loadingButton.value = true;
+   fetchProductStat(datePicker.value[0].format("YYYY-MM-DD HH:mm:ss"), datePicker.value[1].format("YYYY-MM-DD HH:mm:ss"));
+  loadingButton.value = false;
 };
 
 const columns = [
