@@ -46,9 +46,21 @@
           <a-row gutter="16" style="margin-bottom: 20px;">
             <a-col :span="24">
                 <div class="table-operations">
-                  <a-button @click="setAgeSort">Sort age</a-button>
                   <a-button @click="clearFilters">Clear filters</a-button>
                   <a-button @click="clearAll">Clear filters and sorters</a-button>
+                  <a-range-picker
+                    v-model:value="datePicker"
+                    style="width: 400px"
+                    :disabled-date="disabledDate"
+                    :disabled-time="disabledRangeTime"
+                    :show-time="{
+                      hideDisabledOptions: true,
+                      defaultValue: [dayjs('00:00:00', 'HH:mm:ss'), dayjs('11:59:59', 'HH:mm:ss')],
+                    }"
+                    format="YYYY-MM-DD HH:mm:ss"
+                  />
+                  <div><h1>{{ datePicker }}</h1></div>
+                  <a-button type="primary" danger @click="onFilterTime()">Filter</a-button>
                 </div>
             </a-col> 
           </a-row>
@@ -77,6 +89,43 @@ import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import PageHeader from '@/components/admin/utils/PageHeader.vue'
 import StatisticRectangle from '@/components/admin/utils/StatisticRectangle.vue'
+import dayjs from 'dayjs';
+
+const range = (start, end) => {
+  const result = [];
+  for (let i = start; i < end; i++) {
+    result.push(i);
+  }
+  return result;
+};
+
+const disabledDate = current => {
+  // Can not select days before today and today
+  // B20DCCN728 - PTIT
+  return current && current > dayjs().endOf('day');
+};
+
+const disabledRangeTime = (_, type) => {
+  if (type === 'start') {
+    return {
+      disabledHours: () => range(0, 60).splice(4, 20),
+      disabledMinutes: () => range(30, 60),
+      disabledSeconds: () => [55, 56],
+    };
+  }
+  return {
+    disabledHours: () => range(0, 60).splice(20, 4),
+    disabledMinutes: () => range(0, 31),
+    disabledSeconds: () => [55, 56],
+  };
+};
+
+const datePicker = ref();
+
+const onFilterTime = async () => {
+  console.log(datePicker.value[0]);
+  fetchProductStat(datePicker.value[0], datePicker.value[1]);
+};
 
 const columns = [
   {
