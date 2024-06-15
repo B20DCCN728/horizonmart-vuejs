@@ -46,8 +46,6 @@
           <a-row gutter="16" style="margin-bottom: 20px;">
             <a-col :span="24">
                 <div class="table-operations">
-                  <a-button @click="clearFilters">Clear filters</a-button>
-                  <a-button @click="clearAll">Clear filters and sorters</a-button>
                   <a-range-picker
                     v-model:value="datePicker"
                     style="width: 400px"
@@ -59,8 +57,13 @@
                     }"
                     format="YYYY-MM-DD HH:mm:ss"
                   />
-                  <div><h1>{{ datePicker }}</h1></div>
-                  <a-button type="primary" danger :loading="loadingButton" @click="onFilterTime()">Filter</a-button>
+                  <a-button 
+                    type="primary" 
+                    style="margin-left: 12px;"
+                    danger 
+                    :loading="loadingButton" 
+                    @click="onFilterTime()"
+                  >Lọc thời gian</a-button>
                 </div>
             </a-col> 
           </a-row>
@@ -125,8 +128,7 @@ const loadingButton = ref(false);
 
 const onFilterTime = async () => {
   loadingButton.value = true;
-   fetchProductStat(datePicker.value[0].format("YYYY-MM-DD HH:mm:ss"), datePicker.value[1].format("YYYY-MM-DD HH:mm:ss"));
-  loadingButton.value = false;
+  fetchProductStat(datePicker.value[0].format("YYYY-MM-DD HH:mm:ss"), datePicker.value[1].format("YYYY-MM-DD HH:mm:ss"));
 };
 
 const columns = [
@@ -257,6 +259,7 @@ const fetchProductStat = async (from, to) => {
   try {
     const res = await axios.get(`http://localhost:8762/ps/product/get-stat/${encodedFrom}/${encodedTo}`);
     console.log(res.data);
+    loadingButton.value = false;
     productStat.value.totalRevenue = res.data.totalRevenue;
     productStat.value.totalProfit = res.data.totalProfit;
     productStat.value.quantitySold = res.data.quantitySold;
