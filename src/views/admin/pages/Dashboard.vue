@@ -88,12 +88,42 @@
 </template>
 
 <script setup>
+import { message } from 'ant-design-vue';
+import { SmileOutlined } from '@ant-design/icons-vue';
+import { notification } from 'ant-design-vue';
+import { h } from 'vue';
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import PageHeader from '@/components/admin/utils/PageHeader.vue'
 import StatisticRectangle from '@/components/admin/utils/StatisticRectangle.vue'
 import dayjs from 'dayjs';
 
+const openNotification = () => {
+  notification.success({
+    message: 'Bạn hãy chờ một chút!',
+    description:
+      'Dữ liệu đang được xử lý, vui lòng đợi trong giây lát. Mọi sự chờ đợi của bạn sẽ được đền đáp.',
+    icon: () =>
+      h(SmileOutlined, {
+        style: 'color: #108ee9',
+      }),
+  });
+};
+
+// Define the key for the message
+const key = 'updatable';
+const openMessageLoading = () => {
+  message.loading({
+    content: 'Loading...',
+    key,
+  });
+};
+
+const openMessageSuccess = () => {
+  message.success({ content: 'Loaded!', key, duration: 2 });
+};
+
+// Define the range of hours, minutes, and seconds
 const range = (start, end) => {
   const result = [];
   for (let i = start; i < end; i++) {
@@ -128,6 +158,8 @@ const loadingButton = ref(false);
 
 const onFilterTime = async () => {
   loadingButton.value = true;
+  openMessageLoading();
+  openNotification();
   fetchProductStat(datePicker.value[0].format("YYYY-MM-DD HH:mm:ss"), datePicker.value[1].format("YYYY-MM-DD HH:mm:ss"));
 };
 
@@ -259,6 +291,7 @@ const fetchProductStat = async (from, to) => {
   try {
     const res = await axios.get(`http://localhost:8762/ps/product/get-stat/${encodedFrom}/${encodedTo}`);
     console.log(res.data);
+    openMessageSuccess();
     loadingButton.value = false;
     productStat.value.totalRevenue = res.data.totalRevenue;
     productStat.value.totalProfit = res.data.totalProfit;
