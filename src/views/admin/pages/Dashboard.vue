@@ -92,12 +92,13 @@ import { message } from 'ant-design-vue';
 import { SmileOutlined } from '@ant-design/icons-vue';
 import { notification } from 'ant-design-vue';
 import { h } from 'vue';
-import { onMounted, ref } from 'vue'
-import axios from 'axios'
-import PageHeader from '@/components/admin/utils/PageHeader.vue'
-import StatisticRectangle from '@/components/admin/utils/StatisticRectangle.vue'
+import { onMounted, ref } from 'vue';
+import axios from 'axios';
+import PageHeader from '@/components/admin/utils/PageHeader.vue';
+import StatisticRectangle from '@/components/admin/utils/StatisticRectangle.vue';
 import dayjs from 'dayjs';
 
+// Open Notification
 const openNotification = () => {
   notification.success({
     message: 'Bạn hãy chờ một chút!',
@@ -119,6 +120,7 @@ const openMessageLoading = () => {
   });
 };
 
+// Open message success
 const openMessageSuccess = () => {
   message.success({ content: 'Loaded!', key, duration: 2 });
 };
@@ -132,6 +134,7 @@ const range = (start, end) => {
   return result;
 };
 
+// Disable the date before todays
 const disabledDate = current => {
   // Can not select days before today and today
   // B20DCCN728 - PTIT
